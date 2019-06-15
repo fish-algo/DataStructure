@@ -2,9 +2,12 @@ package com.github.fish56.graph;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 使用邻接表实现稀疏图
@@ -19,16 +22,15 @@ import java.util.List;
  * 首先是一个数组，数组的长度就是顶点数
  * 每个元素是一个list，存储了所有和这一个点相连接的其他点
  */
+@ToString
 public class ListGraph extends AbstractGraph{
 
     /**
      * 存储当前图的信息
-     * graph[i][j]为true代表点i和点j相连
+     * adjacencySet[i]是一个集合，表示点i指向的点
      *
-     * 用堆存储比较好吧。。
      */
-    @Getter
-    private List<Integer>[] adjacencyList;
+    private Set<Integer>[] adjacencySet;
 
     /**
      * true: 有向图
@@ -39,15 +41,15 @@ public class ListGraph extends AbstractGraph{
     public ListGraph(int vertexNumber, boolean directed){
         this.vertexNumber = vertexNumber;
         this.directed = directed;
-        this.adjacencyList = new ArrayList[vertexNumber];
+        this.adjacencySet = new HashSet[vertexNumber];
         for (int i = 0; i < vertexNumber; i++) {
-            adjacencyList[i] = new ArrayList<>();
+            adjacencySet[i] = new HashSet<>();
         }
     }
 
     @Override
-    public Iterable<Integer> neighbors(int v) {
-        return null;
+    public Set<Integer> neighbors(int v) {
+        return adjacencySet[v];
     }
 
     /**
@@ -65,38 +67,24 @@ public class ListGraph extends AbstractGraph{
             return;
         }
 
-//        graph.get(a).add(b);
-//
-//        // 如果它是无向图，这边也要加
-//        if (!directed) {
-//            graph.get(b).add(a);
-//        }
-//        edges++;
+        adjacencySet[a].add(b);
+
+        // 如果它是无向图，这边也要加
+        if (!directed) {
+            adjacencySet[a].add(b);
+        }
+        edgeNumber++;
     }
 
     /**
      * 判断a -> b是否有线段
-     * 时间复杂度为O(n)
+     * 时间复杂度为O(1)
      * @param a
      * @param b
      * @return
      */
     @Override
     public boolean hasEdge(int a, int b) {
-//        for (int i = 0; i < graph.get(a).size(); i++) {
-//            if (graph.get(a).get(i).equals(b)) {
-//                return true;
-//            }
-//        }
-        return false;
+        return adjacencySet[a].contains(b);
     }
-
-    /**
-     * 获得点a的相邻边
-     * @param a
-     * @return 和a有相邻边的点的list
-     */
-//    public List<Integer> getEdge(int a){
-//        return graph.get(a);
-//    }
 }

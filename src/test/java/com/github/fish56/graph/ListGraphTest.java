@@ -1,6 +1,5 @@
 package com.github.fish56.graph;
 
-import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,19 +8,11 @@ public class ListGraphTest {
 
     @Test
     public void addEdge() {
-//        ListGraph graph = new ListGraph(4, true);
-//        graph.addEdge(2, 3);
-//        System.out.println(graph);
-//        assertTrue(graph.getGraph().get(2).get(0).equals(3));
-//        assertTrue(graph.getGraph().get(3).size() == 0);
-//        // [[],[],[3],[]]
-//
-//        ListGraph graph2 = new ListGraph(4, false);
-//        graph2.addEdge(2, 3);
-//        System.out.println(graph2);
-//        assertTrue(graph2.getGraph().get(2).get(0).equals(3));
-//        assertTrue(graph2.getGraph().get(3).get(0).equals(2));
-//        // [[],[],[3],[2]]
+        ListGraph graph = new ListGraph(30, true);
+        for (int i = 0; i < 20; i++) {
+            graph.addEdge(i, i + 1);
+        }
+        assertTrue(graph.getEdgeNumber() == 20);
     }
 
     @Test
@@ -33,8 +24,8 @@ public class ListGraphTest {
     @Test
     public void getEdge(){
         ListGraph graph = new ListGraph(4, true);
+        assertFalse(graph.hasEdge(2, 3));
         graph.addEdge(2, 3);
-        //System.out.println(JSONObject.toJSONString(graph.getEdge(2)));
-        // [3]
+        assertTrue(graph.hasEdge(2, 3));
     }
 }
