@@ -15,26 +15,20 @@ import java.util.List;
  * c: 1
  *
  * 这种表示连接关系
+ *
+ * 首先是一个数组，数组的长度就是顶点数
+ * 每个元素是一个list，存储了所有和这一个点相连接的其他点
  */
-public class SparseGraph {
-    /**
-     * 这个图的点数
-     */
-    @Getter
-    private int points;
-
-    /**
-     * 图中边的个数
-     */
-    @Getter
-    private int edges;
+public class ListGraph extends AbstractGraph{
 
     /**
      * 存储当前图的信息
      * graph[i][j]为true代表点i和点j相连
+     *
+     * 用堆存储比较好吧。。
      */
     @Getter
-    private List<List<Integer>> graph;
+    private List<Integer>[] adjacencyList;
 
     /**
      * true: 有向图
@@ -42,18 +36,18 @@ public class SparseGraph {
      */
     private boolean directed;
 
-    public SparseGraph(int points, boolean directed){
-        this.points = points;
+    public ListGraph(int vertexNumber, boolean directed){
+        this.vertexNumber = vertexNumber;
         this.directed = directed;
-        this.graph = initGraph();
+        this.adjacencyList = new ArrayList[vertexNumber];
+        for (int i = 0; i < vertexNumber; i++) {
+            adjacencyList[i] = new ArrayList<>();
+        }
     }
 
-    private List<List<Integer>> initGraph(){
-        List<List<Integer>> graph = new ArrayList<>(points);
-        for (int i = 0; i < points; i++) {
-            graph.add(new ArrayList<Integer>());
-        }
-        return graph;
+    @Override
+    public Iterable<Integer> neighbors(int v) {
+        return null;
     }
 
     /**
@@ -61,6 +55,7 @@ public class SparseGraph {
      * @param a: 第a个点
      * @param b: 第b个点
      */
+    @Override
     public void addEdge(int a, int b){
         // 效率比较低，可以放弃这个判断
         if (hasEdge(a, b)) {
@@ -70,13 +65,13 @@ public class SparseGraph {
             return;
         }
 
-        graph.get(a).add(b);
-
-        // 如果它是无向图，这边也要加
-        if (!directed) {
-            graph.get(b).add(a);
-        }
-        edges++;
+//        graph.get(a).add(b);
+//
+//        // 如果它是无向图，这边也要加
+//        if (!directed) {
+//            graph.get(b).add(a);
+//        }
+//        edges++;
     }
 
     /**
@@ -86,12 +81,13 @@ public class SparseGraph {
      * @param b
      * @return
      */
+    @Override
     public boolean hasEdge(int a, int b) {
-        for (int i = 0; i < graph.get(a).size(); i++) {
-            if (graph.get(a).get(i).equals(b)) {
-                return true;
-            }
-        }
+//        for (int i = 0; i < graph.get(a).size(); i++) {
+//            if (graph.get(a).get(i).equals(b)) {
+//                return true;
+//            }
+//        }
         return false;
     }
 
@@ -100,12 +96,7 @@ public class SparseGraph {
      * @param a
      * @return 和a有相邻边的点的list
      */
-    public List<Integer> getEdge(int a){
-        return graph.get(a);
-    }
-
-    @Override
-    public String toString() {
-        return JSONObject.toJSONString(graph);
-    }
+//    public List<Integer> getEdge(int a){
+//        return graph.get(a);
+//    }
 }

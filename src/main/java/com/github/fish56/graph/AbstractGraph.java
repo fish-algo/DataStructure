@@ -18,10 +18,6 @@ public abstract class AbstractGraph {
     @Getter
     protected int edgeNumber;
 
-    public AbstractGraph(int vertexNumber) {
-        this.vertexNumber = vertexNumber;
-    }
-
     /**
      * 为点v和点w添加一个边
      * @param v
@@ -30,7 +26,14 @@ public abstract class AbstractGraph {
     public abstract void addEdge(int v, int w);
 
     /**
-     * 获得和点v相连的所有的的点
+     * 判断点v和点w是否相连
+     * @param v
+     * @param w
+     */
+    public abstract boolean hasEdge(int v, int w);
+
+    /**
+     * 获得和点v相连的所有的的点的集合
      * @param v
      * @return
      */
