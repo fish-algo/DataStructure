@@ -118,6 +118,29 @@ public class OneWayLinkedList<E> {
         node.next = node2;
         size++;
     }
+    public void remove(E e){
+        if (!contains(e)){
+            throw new RuntimeException("链表中没有这个元素，无法删除");
+        }
+        // 这个判断之后head必然不是null
+        // 并且lis中一定有元素e
+        size--;
+
+        if (head.e.equals(e)){
+            head = head.next;
+            return;
+        }
+
+        Node currentNode = head;
+
+        while (currentNode.next != null) {
+            if (currentNode.next.e.equals(e)){
+                currentNode.next = currentNode.next.next;
+                return;
+            }
+            currentNode = currentNode.next;
+        }
+    }
 
     /**
      * 看看链表中时候有元素e
@@ -125,13 +148,12 @@ public class OneWayLinkedList<E> {
      * @return
      */
     public boolean contains(E e){
-        if (head != null){
-            if (head.e.equals(e)){
-                return true;
-            }
+        if (head == null) {
+            return false;
         }
+
         Node currentNode = head;
-        while (currentNode.next != null){
+        while (currentNode != null){
             if (currentNode.e.equals(e)){
                 return true;
             }

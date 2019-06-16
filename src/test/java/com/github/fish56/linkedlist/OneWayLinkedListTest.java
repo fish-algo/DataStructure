@@ -28,4 +28,27 @@ public class OneWayLinkedListTest {
             System.out.println(linkedList);
         }
     }
+
+    @Test
+    public void contains() {
+        OneWayLinkedList<Integer> linkedList = new OneWayLinkedList<>();
+
+        assertFalse(linkedList.contains(1));
+        linkedList.insert(1,0);
+        assertTrue(linkedList.contains(1));
+    }
+
+    @Test
+    public void remove() {
+        OneWayLinkedList<Integer> linkedList = new OneWayLinkedList<>();
+
+        for (int i = 0; i < 10; i++) {
+            linkedList.insertFirst(i);
+            System.out.println(linkedList);
+        }
+        for (int i = 0; i < 10; i++) {
+            linkedList.remove(i);
+            System.out.println(linkedList);
+        }
+    }
 }

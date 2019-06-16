@@ -29,7 +29,7 @@ public class BSTree<E extends Comparable<E>> {
      * 将元素e插入到node节点中，
      * 如果e和已有的值相等，则忽略这次插入
      *
-     * O(log(n))的复杂度
+     * O(h)的复杂度 h为🌲的高度，一般为log(n)
      */
     private void addToNode(E e, Node node){
         // 相等的话，不做任何事
