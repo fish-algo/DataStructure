@@ -1,4 +1,4 @@
-package com.github.fish56.graph;
+package com.github.fish56.graph.weight;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * 默认为简单图，没有平行边和自环边
  */
-public abstract class AbstractGraph {
+public abstract class AbstractWeightGraph {
     /**
      * 当前图的顶点数
      */
@@ -32,11 +32,9 @@ public abstract class AbstractGraph {
     protected boolean directed;
 
     /**
-     * 为点v和点w添加一个边
-     * @param v
-     * @param w
+     * 添加一个边
      */
-    public abstract void addEdge(int v, int w);
+    public abstract void addEdge(Edge edge);
 
     /**
      * 判断点v和点w是否相连
@@ -50,7 +48,7 @@ public abstract class AbstractGraph {
      * @param v
      * @return
      */
-    public abstract Iterable<Integer> neighbors(int v);
+    public abstract Iterable<Edge> neighbors(int v);
 
     /**
      * 深度优先遍历点a

@@ -1,5 +1,6 @@
-package com.github.fish56.graph;
+package com.github.fish56.graph.weight;
 
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.*;
@@ -20,35 +21,42 @@ import java.util.*;
  *
  */
 @ToString
-public class MatrixGraph extends AbstractGraph {
+@Getter
+public class MatrixWeightGraph {
+    private int vertexNumber;
+    private boolean directed;
+    private int edgeNumber;
+
     /**
      * 存储当前图的信息
-     * matrix[i][j]为true代表点i和点j相连
+     *
+     * matrix[i][j]为0代表点i和点j不相连
+     * 否则说明两个点之间连通，值代表连接的权重
      */
-    private boolean[][] matrix;
+    private double[][] matrix;
 
-    public MatrixGraph(int vertexNumber, boolean directed){
+    public MatrixWeightGraph(int vertexNumber, boolean directed){
         this.vertexNumber = vertexNumber;
         this.directed = directed;
-        this.matrix = new boolean[vertexNumber][vertexNumber];
+        this.matrix = new double[vertexNumber][vertexNumber];
     }
 
     /**
      * 两个点添加一个线
      * @param a: 第一个点
      * @param b: 第二个点
+     * @param weight: 边的权重
      */
-    @Override
-    public void addEdge(int a, int b){
+    public void addEdge(int a, int b, double weight){
         if (hasEdge(a, b)) {
             return;
         }
 
-        matrix[a][b] = true;
+        matrix[a][b] = weight;
 
         // 如果它是无向图，另一个边也要加
         if (!directed) {
-            matrix[b][a] = true;
+            matrix[b][a] = weight;
         }
         edgeNumber++;
     }
@@ -62,13 +70,12 @@ public class MatrixGraph extends AbstractGraph {
      * @param v
      * @return
      */
-    @Override
     public List<Integer> neighbors(int v) {
         List<Integer> pointList = new ArrayList<>();
 
         // 遍历matrix[v]中的每个元素
         for (int i = 0; i < vertexNumber; i++) {
-            if (matrix[v][i]){
+            if (matrix[v][i] != 0){
                 pointList.add(i);
             }
         }
@@ -81,14 +88,14 @@ public class MatrixGraph extends AbstractGraph {
      * @param b
      * @return
      */
-    @Override
+
     public boolean hasEdge(int a, int b) {
         if (a >= vertexNumber || b >= vertexNumber) {
             throw new IllegalArgumentException("数组中没有这么多点");
         }
 
         // 不管是不是有向图，判断这一个就行了
-        return matrix[a][b];
+        return matrix[a][b] != 0;
     }
 
 
@@ -103,7 +110,7 @@ public class MatrixGraph extends AbstractGraph {
         // 遍历当前点的连通点
         for (int currentPoint = 0; currentPoint < vertexNumber; currentPoint++ ){
             // 当前路径为false就跳过
-            if (!matrix[a][currentPoint]){
+            if (matrix[a][currentPoint] == 0){
                 continue;
             }
             // 当前节点以及被遍历，跳过
@@ -117,7 +124,7 @@ public class MatrixGraph extends AbstractGraph {
         }
     }
 
-    @Override
+
     public List<Integer> deepFirstLoop(int point) {
         // 保存已经被遍历的点供后续查询
         Set<Integer> loopedPoints = new TreeSet<>();
@@ -144,7 +151,7 @@ public class MatrixGraph extends AbstractGraph {
         // 遍历当前点的连通点
         for (int currentPoint = 0; currentPoint < vertexNumber; currentPoint++ ){
             // 当前路径为false就跳过
-            if (!matrix[beginPoint][currentPoint]){
+            if (matrix[beginPoint][currentPoint] == 0){
                 continue;
             }
 
@@ -175,7 +182,7 @@ public class MatrixGraph extends AbstractGraph {
         // 说明遍历一圈后还没有找到
         return false;
     }
-    @Override
+
     public Stack<Integer> deepFirstRoad(int beginPoint, int endPoint) {
         // 保存已经被遍历的点供后续查询
         Set<Integer> loopedPoints = new TreeSet<>();
@@ -189,7 +196,6 @@ public class MatrixGraph extends AbstractGraph {
         return res ? roads : null;
     }
 
-    @Override
     public List<Integer> breadthFirstRoad(int beginPoint, int endPoint) {
         return null;
     }

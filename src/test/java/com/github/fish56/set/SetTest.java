@@ -2,6 +2,8 @@ package com.github.fish56.set;
 
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 
 public class SetTest {
@@ -24,5 +26,42 @@ public class SetTest {
         LinkedListSet linkedListSet = new LinkedListSet();
         insert(linkedListSet);
         // 耗时: 162 毫秒
+    }
+
+    private class Monkey{
+        String name;
+
+        public Monkey(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return name.equals(((Monkey) obj).name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name);
+        }
+    }
+
+    /**
+     * 同时重写hashCode和equals方法才能让两个对象相等
+     */
+    @Test
+    public void contain(){
+       Monkey monkey1 = new Monkey("Jon");
+       Monkey monkey2 = new Monkey("Jon");
+
+        java.util.Set<Monkey> monkeySet = new HashSet<>();
+       monkeySet.add(monkey1);
+
+       System.out.println(monkeySet.contains(monkey2));
+       // false
+
+       monkeySet.add(monkey2);
+       System.out.println(monkeySet.size());
+       // 2
     }
 }

@@ -24,10 +24,11 @@ public class BSTree<E extends Comparable<E>> {
     }
 
     /**
-     * @param e
-     * @param node 这个节点不会为空，自己手动确保这一点方便编码
+     * @param e 要出入的元素e
+     * @param node 目标节点
      * 将元素e插入到node节点中，
      * 如果e和已有的值相等，则忽略这次插入
+     * 同时手动的确保这个节点node不会为null，这样会方便写代码
      *
      * O(h)的复杂度 h为🌲的高度，一般为log(n)
      */
@@ -57,6 +58,7 @@ public class BSTree<E extends Comparable<E>> {
     public void add(E e){
         if (root == null) {
             root = new Node(e);
+            size++;
         }  else {
             addToNode(e, root);
         }
@@ -64,19 +66,30 @@ public class BSTree<E extends Comparable<E>> {
 
     /**
      * 看看这个节点以及它的子节点是不是包含e
-     * @param e
-     * @param node
-     * @return
-     * O(log(n))
+     * @param e 要查找的元素
+     * @param node 目标节点
+     * @return 当前二叉搜索树是否包含目标值
      */
     private boolean contains(E e, Node node){
+        // 这里我们还要注意下node为null的情况
         if (node == null) {
             return false;
-        } else if (node.e.equals(e)){
+        }
+
+        // 判断当前节点是否包含目标节点
+        if (node.e.equals(e)){
+
+            // 既然已经查询到了，直接返回即可
             return true;
+
+            // 判断目标值e可能会出现在当前节点的左边还是右边
         } else if (node.e.compareTo(e) > 0) {
+
+            // 说明在当前节点的左边，递归查询即可
             return contains(e, node.left);
+
         } else {
+            // 说明在当前节点的右边，递归查询即可
             return contains(e, node.right);
         }
     }
@@ -86,7 +99,7 @@ public class BSTree<E extends Comparable<E>> {
 
     /**
      * 中序遍历
-     * 返回值从小到大
+     * 返回值是按照从小到大的顺序的
      * @param node
      */
     private void inOrder(Node node){
@@ -103,7 +116,7 @@ public class BSTree<E extends Comparable<E>> {
     }
 
     /**
-     * 前遍历
+     * 前序遍历
      * @param node
      */
     private void preOrder(Node node){
@@ -112,11 +125,29 @@ public class BSTree<E extends Comparable<E>> {
         }
         // 在前面
         System.out.println(node.e);
-        inOrder(node.right);
-        inOrder(node.left);
+        preOrder(node.left);
+        preOrder(node.right);
     }
     public void preOrder(){
         preOrder(root);
+    }
+
+    /**
+     * 后续遍历
+     * 适用于某些需要先处理子节点的情况
+     * @param node
+     */
+    private void postOrder(Node node){
+        if (node == null) {
+            return;
+        }
+        postOrder(node.left);
+        // 在中间
+        System.out.println(node.e);
+        postOrder(node.right);
+    }
+    public void postOrder(){
+        postOrder(root);
     }
 
     /**
